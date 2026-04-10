@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/Sidebar'
+import Loading from '@/components/Loading'
 import { Plus, X } from 'lucide-react'
 
 export default function LoanPaymentsPage() {
@@ -97,7 +98,9 @@ export default function LoanPaymentsPage() {
     return (
       <div className="flex">
         <Sidebar role="admin" />
-        <div className="flex-1 p-4 md:p-8">Loading...</div>
+        <div className="flex-1 bg-gray-900">
+          <Loading />
+        </div>
       </div>
     )
   }

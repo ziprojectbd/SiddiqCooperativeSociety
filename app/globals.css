@@ -1,6 +1,9 @@
+/* Tailwind CSS directives - these are valid and required */
+/* stylelint-disable */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* stylelint-enable */
 
 @layer base {
   :root {
@@ -54,7 +57,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gray-900 text-foreground;
   }
 }
 

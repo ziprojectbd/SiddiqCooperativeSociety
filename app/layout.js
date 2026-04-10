@@ -13,17 +13,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-gray-900">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@100..900&display=swap" rel="stylesheet" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className + " bg-gray-900"}>
         <LanguageProvider>
           <SidebarProvider>
             <Header />
-            <div className="pt-16">
+            <div className="pt-16 bg-gray-900 min-h-screen">
               {children}
             </div>
           </SidebarProvider>

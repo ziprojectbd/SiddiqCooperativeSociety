@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/Sidebar'
+import Loading from '@/components/Loading'
 import { Plus, Edit, Trash2 } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -155,7 +156,9 @@ export default function ExternalLoansPage() {
     return (
       <div className="flex">
         <Sidebar role="admin" />
-        <div className="flex-1 p-4 md:p-8">Loading...</div>
+        <div className="flex-1 bg-gray-900">
+          <Loading />
+        </div>
       </div>
     )
   }

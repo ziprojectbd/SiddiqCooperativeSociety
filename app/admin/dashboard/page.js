@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Sidebar from '@/components/Sidebar'
 import StatCard from '@/components/StatCard'
 import DepositModal from '@/components/DepositModal'
+import Loading from '@/components/Loading'
 import { Plus } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -142,7 +143,9 @@ export default function AdminDashboard() {
     return (
       <div className="flex">
         <Sidebar role="admin" />
-        <div className="flex-1 p-4 md:p-8">Loading...</div>
+        <div className="flex-1 bg-gray-900">
+          <Loading />
+        </div>
       </div>
     )
   }

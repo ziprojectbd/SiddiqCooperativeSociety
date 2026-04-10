@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Sidebar from '@/components/Sidebar'
+import Loading from '@/components/Loading'
 import { Plus, Pencil, Trash2, X, Eye, EyeOff, Eye as ViewEye } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -166,7 +167,9 @@ export default function MembersPage() {
     return (
       <div className="flex">
         <Sidebar role="admin" />
-        <div className="flex-1 p-2 md:p-8 text-white text-sm md:text-base">Loading...</div>
+        <div className="flex-1 bg-gray-900">
+          <Loading />
+        </div>
       </div>
     )
   }

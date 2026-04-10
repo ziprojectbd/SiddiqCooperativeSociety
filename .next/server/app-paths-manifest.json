@@ -1,6 +1,10 @@
 {
+  "/not-found": "app/not-found.js",
+  "/admin/external-loan-payments/page": "app/admin/external-loan-payments/page.js",
   "/api/[[...path]]/route": "app/api/[[...path]]/route.js",
+  "/admin/loans/page": "app/admin/loans/page.js",
   "/page": "app/page.js",
+  "/admin/loan-payments/page": "app/admin/loan-payments/page.js",
   "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/member/dashboard/page": "app/member/dashboard/page.js"
+  "/admin/members/page": "app/admin/members/page.js"
 }

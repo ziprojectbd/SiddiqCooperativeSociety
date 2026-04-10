@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/Sidebar'
+import Loading from '@/components/Loading'
 import { BarChart3, Calendar, DollarSign } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -34,10 +35,8 @@ export default function DepositHistoryPage() {
     return (
       <div className="flex h-screen overflow-hidden">
         <Sidebar role="member" />
-        <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900">
-          <div className="flex items-center gap-4 p-4 md:p-6 bg-gray-800">
-            <div className="text-white">Loading...</div>
-          </div>
+        <div className="flex-1 bg-gray-900">
+          <Loading />
         </div>
       </div>
     )

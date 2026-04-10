@@ -132,6 +132,21 @@ export default function LoginPage() {
           </button>
         </form>
 
+        {/* Test Credentials */}
+        <div className="mt-6 p-4 bg-gray-700/50 rounded-xl border border-gray-600">
+          <p className="text-xs text-gray-400 mb-2 text-center font-medium">Test Credentials:</p>
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between text-gray-300">
+              <span>Admin:</span>
+              <span className="text-indigo-400">01700000000 / admin123</span>
+            </div>
+            <div className="flex justify-between text-gray-300">
+              <span>Member:</span>
+              <span className="text-indigo-400">01700000001 / member123</span>
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
         <div className="mt-6 text-center text-xs text-gray-500">
           <p>© 2026 সিদ্দিক সমবায় সমিতি Management</p>
