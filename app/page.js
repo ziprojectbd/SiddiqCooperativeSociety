@@ -47,22 +47,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
+      <div className="bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
         {/* Logo/Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-lg">
             <LogIn size={32} className="text-white" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Somobay Somiti
+          <h1 className="text-3xl font-bold text-white">
+            সিদ্দিক সমবায় সমিতি, কাউনিয়া, রংপুর
           </h1>
-          <p className="text-gray-500 mt-2 text-sm">{t('managementSystem')}</p>
+          <p className="text-gray-400 mt-2 text-sm">{t('managementSystem')}</p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
+          <div className="bg-red-900 border-l-4 border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
             <AlertCircle size={18} />
             <span className="text-sm">{error}</span>
           </div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-5">
           {/* Phone Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
               {t('phone')}
             </label>
             <div className="relative">
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 type="tel"
                 value={credentials.phone}
                 onChange={(e) => setCredentials({ ...credentials, phone: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-white placeholder-gray-400"
                 placeholder={t('enterPhone')}
                 required
               />
@@ -93,7 +93,7 @@ export default function LoginPage() {
 
           {/* Password Input */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
               {t('password')}
             </label>
             <div className="relative">
@@ -105,7 +105,7 @@ export default function LoginPage() {
                 type="password"
                 value={credentials.password}
                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-white placeholder-gray-400"
                 placeholder={t('enterPassword')}
                 required
               />
@@ -116,7 +116,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 transition-all font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -133,8 +133,8 @@ export default function LoginPage() {
         </form>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-xs text-gray-400">
-          <p>© 2024 Somobay Somiti Management</p>
+        <div className="mt-6 text-center text-xs text-gray-500">
+          <p>© 2026 সিদ্দিক সমবায় সমিতি Management</p>
         </div>
       </div>
     </div>
