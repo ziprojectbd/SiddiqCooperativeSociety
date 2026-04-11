@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@/components/Sidebar'
 import Loading from '@/components/Loading'
-import { Plus, Edit, Trash2 } from 'lucide-react'
+import { Plus, Edit, Trash2, X } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ExternalBorrowersPage() {

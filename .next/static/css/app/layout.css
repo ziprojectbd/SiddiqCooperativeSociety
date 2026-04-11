@@ -579,11 +579,11 @@ body {
 .h-10 {
   height: 2.5rem;
 }
-.h-12 {
-  height: 3rem;
-}
 .h-16 {
   height: 4rem;
+}
+.h-2 {
+  height: 0.5rem;
 }
 .h-8 {
   height: 2rem;
@@ -594,9 +594,6 @@ body {
 .h-screen {
   height: 100vh;
 }
-.h-2 {
-  height: 0.5rem;
-}
 .max-h-\[90vh\] {
   max-height: 90vh;
 }
@@ -606,11 +603,11 @@ body {
 .w-10 {
   width: 2.5rem;
 }
-.w-12 {
-  width: 3rem;
-}
 .w-16 {
   width: 4rem;
+}
+.w-2 {
+  width: 0.5rem;
 }
 .w-64 {
   width: 16rem;
@@ -620,9 +617,6 @@ body {
 }
 .w-full {
   width: 100%;
-}
-.w-2 {
-  width: 0.5rem;
 }
 .min-w-\[120px\] {
   min-width: 120px;
@@ -654,14 +648,6 @@ body {
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
 @keyframes bounce {
   0%, 100% {
     transform: translateY(-25%);
@@ -682,6 +668,14 @@ body {
 }
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 .cursor-not-allowed {
   cursor: not-allowed;
@@ -837,6 +831,9 @@ body {
   --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
 }
+.bg-gray-700\/50 {
+  background-color: rgb(55 65 81 / 0.5);
+}
 .bg-gray-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
@@ -852,6 +849,13 @@ body {
 .bg-green-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(20 83 45 / var(--tw-bg-opacity, 1));
+}
+.bg-indigo-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 102 241 / var(--tw-bg-opacity, 1));
+}
+.bg-indigo-500\/20 {
+  background-color: rgb(99 102 241 / 0.2);
 }
 .bg-indigo-600 {
   --tw-bg-opacity: 1;
@@ -884,16 +888,6 @@ body {
 .bg-yellow-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(113 63 18 / var(--tw-bg-opacity, 1));
-}
-.bg-indigo-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(99 102 241 / var(--tw-bg-opacity, 1));
-}
-.bg-indigo-500\/20 {
-  background-color: rgb(99 102 241 / 0.2);
-}
-.bg-gray-700\/50 {
-  background-color: rgb(55 65 81 / 0.5);
 }
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
@@ -1065,10 +1059,6 @@ body {
 .text-indigo-400 {
   --tw-text-opacity: 1;
   color: rgb(129 140 248 / var(--tw-text-opacity, 1));
-}
-.text-indigo-500 {
-  --tw-text-opacity: 1;
-  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
 }
 .text-orange-300 {
   --tw-text-opacity: 1;
