@@ -51,11 +51,13 @@ export default function LoginPage() {
       <div className="bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
         {/* Logo/Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-lg">
-            <LogIn size={32} className="text-white" />
+          <div className="inline-flex items-center justify-center mb-4">
+            <img src="/images/sk-somobay-somiti-logo.jpg" alt="Logo" className="w-24 h-24 object-contain rounded-2xl pointer-events-none" />
           </div>
-          <h1 className="text-3xl font-bold text-white">
-            সিদ্দিক সমবায় সমিতি, কাউনিয়া, রংপুর
+          <h1 className="text-4xl font-bold text-white leading-tight">
+            SK সমবায় সমিতি
+            <br />
+            <span className="text-2xl">কাউনিয়া, রংপুর</span>
           </h1>
           <p className="text-gray-400 mt-2 text-sm">{t('managementSystem')}</p>
         </div>

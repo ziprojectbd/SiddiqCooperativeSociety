@@ -16,7 +16,7 @@ export default function Header() {
   const getHeaderText = () => {
     if (isMemberRoute) return 'সিদ্দিক সমবায় সমিতি, গ্রাহক আইডি'
     if (isAdminRoute) return 'সিদ্দিক সমবায় সমিতি, অ্যাডমিন আইডি'
-    return 'সিদ্দিক সমবায় সমিতি, কাউনিয়া, রংপুর'
+    return 'SK সমবায় সমিতি,কাউনিয়া, রংপুর'
   }
 
   return (
@@ -29,16 +29,13 @@ export default function Header() {
           >
             <Menu size={24} />
           </button>
-          <div className="text-white font-bold text-base md:text-lg">
-            {getHeaderText()}
-          </div>
         </div>
       )}
-      {!showHamburger && (
-        <div className="text-white font-bold text-base md:text-lg text-center">
-          {getHeaderText()}
+      <div className="flex-1 marquee-container">
+        <div className="marquee-content text-white text-base md:text-lg">
+          بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ | আসসালামু আলাইকুম ওয়া রাহমাতুল্লাহি ওয়া বারাকাতুহু | SK সমবায় সমিতি, কাউনিয়া, রংপুর-এর পক্ষ থেকে আপনাদের জানাই আন্তরিক শুভেচ্ছা ও স্বাগতম। | আমরা আশা করি, আপনাদের সবার সহযোগিতা ও অংশগ্রহণে আমাদের এই সমিতি আরও উন্নতি ও সমৃদ্ধির পথে এগিয়ে যাবে ইনশাআল্লাহ। | ধন্যবাদ সবাইকে। &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ | আসসালামু আলাইকুম ওয়া রাহমাতুল্লাহি ওয়া বারাকাতুহু | SK সমবায় সমিতি, কাউনিয়া, রংপুর-এর পক্ষ থেকে আপনাদের জানাই আন্তরিক শুভেচ্ছা ও স্বাগতম। | আমরা আশা করি, আপনাদের সবার সহযোগিতা ও অংশগ্রহণে আমাদের এই সমিতি আরও উন্নতি ও সমৃদ্ধির পথে এগিয়ে যাবে ইনশাআল্লাহ। | ধন্যবাদ সবাইকে।
         </div>
-      )}
+      </div>
       {showHamburger && <LanguageDropdown />}
     </header>
   )
