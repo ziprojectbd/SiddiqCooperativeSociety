@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Phone, Lock, LogIn, AlertCircle, Loader2 } from 'lucide-react'
+import { Phone, Lock, LogIn, AlertCircle, Loader2, Chrome } from 'lucide-react'
+import { signIn } from 'next-auth/react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function LoginPage() {
@@ -47,12 +48,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
-      <div className="bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
+    <div className="min-h-screen flex items-start justify-center bg-gray-900 p-4 pt-8">
+      <div className="bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
         {/* Logo/Header Section */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center mb-4">
-            <img src="/images/sk-somobay-somiti-logo.jpg" alt="Logo" className="w-24 h-24 object-contain rounded-2xl pointer-events-none" />
+        <div className="text-center mb-4">
+          <div className="inline-flex items-center justify-center mb-2">
+            <img src="/images/sk-somobay-somiti-logo.png" alt="Logo" className="w-32 h-32 object-contain rounded-2xl pointer-events-none" />
           </div>
           <h1 className="text-4xl font-bold text-white leading-tight">
             SK সমবায় সমিতি
@@ -134,16 +135,35 @@ export default function LoginPage() {
           </button>
         </form>
 
+        {/* Google Login for Admin */}
+        <div className="mt-4">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="px-2 bg-gray-800 text-gray-400">Admin Login</span>
+            </div>
+          </div>
+          <button
+            onClick={() => signIn('google', { callbackUrl: '/admin/dashboard' })}
+            className="mt-3 w-full bg-white text-gray-800 py-3 rounded-xl hover:bg-gray-100 transition-all font-semibold shadow-lg flex items-center justify-center gap-2"
+          >
+            <Chrome size={20} />
+            Sign in with Google
+          </button>
+        </div>
+
         {/* Test Credentials */}
         <div className="mt-6 p-4 bg-gray-700/50 rounded-xl border border-gray-600">
           <p className="text-xs text-gray-400 mb-2 text-center font-medium">Test Credentials:</p>
-          <div className="space-y-2 text-xs">
-            <div className="flex justify-between text-gray-300">
-              <span>Admin:</span>
+          <div className="space-y-2 text-xs text-center">
+            <div className="text-gray-300">
+              <span>Admin: </span>
               <span className="text-indigo-400">01700000000 / admin123</span>
             </div>
-            <div className="flex justify-between text-gray-300">
-              <span>Member:</span>
+            <div className="text-gray-300">
+              <span>Member: </span>
               <span className="text-indigo-400">01700000001 / member123</span>
             </div>
           </div>
