@@ -22,7 +22,7 @@ export default function Sidebar({ role }) {
     { href: '/admin/external-borrowers', icon: UserPlus, label: t('externalBorrowers') },
     { href: '/admin/external-loans', icon: FileText, label: t('externalLoans') },
     { href: '/admin/external-loan-payments', icon: ArrowLeftRight, label: t('externalLoanPayments') },
-    { href: '/admin/loans', icon: FileText, label: t('memberLoans') },
+    { href: '/admin/member-loans', icon: FileText, label: t('memberLoans') },
     { href: '/admin/loan-payments', icon: ArrowLeftRight, label: t('memberLoanPayments') },
     { href: '/admin/reports', icon: BarChart3, label: t('reports') },
     { href: '/admin/settings', icon: Settings, label: t('settings') },

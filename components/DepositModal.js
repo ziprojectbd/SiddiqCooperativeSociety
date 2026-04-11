@@ -60,7 +60,7 @@ export default function DepositModal({ isOpen, onClose, members, depositForm, se
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-400 mb-2">
               Date
             </label>
@@ -72,6 +72,22 @@ export default function DepositModal({ isOpen, onClose, members, depositForm, se
                 setDepositForm({ ...depositForm, date: e.target.value })
               }
               className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-700 text-white"
+            />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Collector Name
+            </label>
+            <input
+              type="text"
+              required
+              value={depositForm.collectorName}
+              onChange={(e) =>
+                setDepositForm({ ...depositForm, collectorName: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-700 text-white"
+              placeholder="Enter collector name"
             />
           </div>
 

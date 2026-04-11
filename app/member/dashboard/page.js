@@ -13,7 +13,6 @@ export default function MemberDashboard() {
     totalDeposits: 0,
     activeLoans: 0,
     pendingPayments: 0,
-    monthlySavings: 0,
   })
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
@@ -81,11 +80,6 @@ export default function MemberDashboard() {
               title={t('pendingPayments')}
               value={`৳${stats.pendingPayments.toLocaleString()}`}
               change={5}
-            />
-            <StatCard
-              title={t('monthlySavings')}
-              value={`৳${stats.monthlySavings.toLocaleString()}`}
-              change={12}
             />
           </div>
 

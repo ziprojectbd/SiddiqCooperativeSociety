@@ -95,8 +95,15 @@ export default function ExternalLoanPaymentsPage() {
     <div className="flex h-screen overflow-hidden">
       <Sidebar role="admin" />
       <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900">
-        <div className="flex items-center gap-4 p-4 md:p-6 bg-gray-800">
-          <h1 className="text-2xl font-bold text-white">{t('externalLoanPayments')}</h1>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 md:p-6 bg-gray-800">
+          <h1 className="text-xl sm:text-2xl font-bold text-white">{t('externalLoanPayments')}</h1>
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-indigo-600 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-xl hover:bg-indigo-700 flex items-center gap-2 text-sm sm:text-base font-medium shadow-lg transition-all active:scale-95 whitespace-nowrap"
+          >
+            <Plus size={18} className="sm:w-5 sm:h-5" />
+            {t('addPayment')}
+          </button>
         </div>
 
         <div className="flex-1 overflow-auto p-4 md:p-8">

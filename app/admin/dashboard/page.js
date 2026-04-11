@@ -12,14 +12,20 @@ export default function AdminDashboard() {
   const { t } = useLanguage()
   const [stats, setStats] = useState({
     totalMembers: 0,
-    totalDeposits: 0,
-    totalLoans: 0,
-    activeLoans: 0,
-    totalSavings: 0,
+    totalNumberDeposits: 0,
+    totalDepositAmount: 0,
+    todaysCollections: 0,
+    totalNumberLoans: 0,
+    activeLoanAccounts: 0,
+    totalActiveLoanAmount: 0,
+    availableBalance: 0,
     externalBorrowers: 0,
-    externalLoans: 0,
+    externalLoansTotalCount: 0,
     activeExternalLoans: 0,
     externalLoanAmount: 0,
+    memberLoansTotalCount: 0,
+    activeMemberLoans: 0,
+    memberLoanAmount: 0,
   })
   const [loading, setLoading] = useState(true)
   const [showDepositModal, setShowDepositModal] = useState(false)
@@ -159,38 +165,86 @@ export default function AdminDashboard() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <StatCard
-            title={t('totalMembers')}
-            value={stats.totalMembers}
-            change={12}
-          />
-          <StatCard
-            title={t('totalDeposits')}
-            value={`৳${stats.totalDeposits.toLocaleString()}`}
-            change={8}
-          />
-          <StatCard
-            title={t('externalBorrowers')}
-            value={stats.externalBorrowers}
-            change={5}
-          />
-          <StatCard
-            title={t('externalLoans')}
-            value={stats.externalLoans}
-            change={3}
-          />
-          <StatCard
-            title={t('activeExternalLoans')}
-            value={stats.activeExternalLoans}
-            change={2}
-          />
-          <StatCard
-            title={t('externalLoanAmount')}
-            value={`৳${stats.externalLoanAmount.toLocaleString()}`}
-            change={10}
-          />
-        </div>
+          {/* Main Stats Section */}
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-white mb-4">{t('dashboardSummary')}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <StatCard
+                title={t('totalMembers')}
+                value={stats.totalMembers || 0}
+              />
+              <StatCard
+                title={t('totalNumberDeposits')}
+                value={stats.totalNumberDeposits || 0}
+              />
+              <StatCard
+                title={t('totalDepositAmount')}
+                value={`৳${(stats.totalDepositAmount || 0).toLocaleString()}`}
+              />
+              <StatCard
+                title={t('todaysCollections')}
+                value={`৳${(stats.todaysCollections || 0).toLocaleString()}`}
+              />
+              <StatCard
+                title={t('totalNumberLoans')}
+                value={stats.totalNumberLoans || 0}
+              />
+              <StatCard
+                title={t('activeLoanAccounts')}
+                value={stats.activeLoanAccounts || 0}
+              />
+              <StatCard
+                title={t('totalActiveLoanAmount')}
+                value={`৳${(stats.totalActiveLoanAmount || 0).toLocaleString()}`}
+              />
+              <StatCard
+                title={t('availableBalance')}
+                value={`৳${(stats.availableBalance || 0).toLocaleString()}`}
+              />
+            </div>
+          </div>
+
+          {/* External Borrowing Section */}
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-white mb-4">{t('externalBorrowingSection')}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <StatCard
+                title={t('externalBorrowers')}
+                value={stats.externalBorrowers || 0}
+              />
+              <StatCard
+                title={t('externalLoansTotalCount')}
+                value={stats.externalLoansTotalCount || 0}
+              />
+              <StatCard
+                title={t('activeExternalLoans')}
+                value={stats.activeExternalLoans || 0}
+              />
+              <StatCard
+                title={t('externalLoanAmount')}
+                value={`৳${(stats.externalLoanAmount || 0).toLocaleString()}`}
+              />
+            </div>
+          </div>
+
+          {/* Member Loans Section */}
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-white mb-4">{t('memberLoansSection')}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <StatCard
+                title={t('memberLoansTotalCount')}
+                value={stats.memberLoansTotalCount || 0}
+              />
+              <StatCard
+                title={t('activeMemberLoans')}
+                value={stats.activeMemberLoans || 0}
+              />
+              <StatCard
+                title={t('memberLoanAmount')}
+                value={`৳${(stats.memberLoanAmount || 0).toLocaleString()}`}
+              />
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Recent Deposits */}

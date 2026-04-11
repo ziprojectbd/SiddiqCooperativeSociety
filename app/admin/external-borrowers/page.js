@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Loading from '@/components/Loading'
 import { Plus, Edit, Trash2, X, Pencil } from 'lucide-react'
@@ -8,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ExternalBorrowersPage() {
   const { t } = useLanguage()
+  const router = useRouter()
   const [borrowers, setBorrowers] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -23,6 +25,10 @@ export default function ExternalBorrowersPage() {
     guarantorPhone: '',
     guarantorAddress: '',
   })
+
+  const handleAddClick = () => {
+    router.push('/admin/external-borrowers/add-member')
+  }
 
   useEffect(() => {
     fetchBorrowers()
@@ -142,7 +148,7 @@ export default function ExternalBorrowersPage() {
         <div className="flex items-center gap-4 p-4 md:p-6 bg-gray-800">
           <h1 className="text-2xl font-bold text-white">{t('externalBorrowers')}</h1>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={handleAddClick}
             className="bg-indigo-600 text-white px-4 py-3 rounded-xl hover:bg-indigo-700 flex items-center gap-2 text-base font-medium w-full shadow-lg transition-all active:scale-95"
           >
             <Plus size={20} />

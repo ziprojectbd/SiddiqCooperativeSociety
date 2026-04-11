@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Loading from '@/components/Loading'
 import { Plus, Edit, Trash2, X, Pencil } from 'lucide-react'
@@ -8,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ExternalLoansPage() {
   const { t } = useLanguage()
+  const router = useRouter()
   const [loans, setLoans] = useState([])
   const [borrowers, setBorrowers] = useState([])
   const [loading, setLoading] = useState(true)
@@ -57,33 +59,8 @@ export default function ExternalLoansPage() {
     }
   }
 
-  const handleAddLoan = async (e) => {
-    e.preventDefault()
-    try {
-      const token = localStorage.getItem('token')
-      await fetch('/api/external-loans', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(loanForm),
-      })
-      setShowModal(false)
-      setLoanForm({
-        borrowerId: '',
-        borrowerName: '',
-        amount: '',
-        interestRate: '',
-        tenureMonths: '',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: '',
-        purpose: '',
-      })
-      fetchLoans()
-    } catch (error) {
-      console.error('Failed to add loan:', error)
-    }
+  const handleAddClick = () => {
+    router.push('/admin/external-loans/add-loan')
   }
 
   const handleEditClick = (loan) => {
@@ -167,13 +144,13 @@ export default function ExternalLoansPage() {
     <div className="flex h-screen overflow-hidden">
       <Sidebar role="admin" />
       <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900">
-        <div className="flex items-center gap-4 p-4 md:p-6 bg-gray-800">
-          <h1 className="text-2xl font-bold text-white">{t('externalLoans')}</h1>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 md:p-6 bg-gray-800">
+          <h1 className="text-xl sm:text-2xl font-bold text-white">{t('externalLoans')}</h1>
           <button
-            onClick={() => setShowModal(true)}
-            className="bg-indigo-600 text-white px-4 py-3 rounded-xl hover:bg-indigo-700 flex items-center gap-2 text-base font-medium w-full shadow-lg transition-all active:scale-95"
+            onClick={handleAddClick}
+            className="bg-indigo-600 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-xl hover:bg-indigo-700 flex items-center gap-2 text-sm sm:text-base font-medium shadow-lg transition-all active:scale-95 whitespace-nowrap"
           >
-            <Plus size={20} />
+            <Plus size={18} className="sm:w-5 sm:h-5" />
             {t('addLoan')}
           </button>
         </div>
@@ -248,7 +225,7 @@ export default function ExternalLoansPage() {
             <div className="bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-white">
-                  {editingLoan ? t('save') : t('addLoan')}
+                  {t('editLoan')}
                 </h2>
                 <button
                   onClick={() => {
@@ -271,7 +248,7 @@ export default function ExternalLoansPage() {
                 </button>
               </div>
 
-              <form onSubmit={editingLoan ? handleUpdateLoan : handleAddLoan} className="space-y-4">
+              <form onSubmit={handleUpdateLoan} className="space-y-4">
                 <div>
                   <label className="block text-gray-400 text-sm font-medium mb-2">Borrower</label>
                   <select
@@ -380,7 +357,7 @@ export default function ExternalLoansPage() {
                     type="submit"
                     className="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 font-medium shadow-lg transition-all active:scale-95"
                   >
-                    {editingLoan ? t('save') : t('addLoan')}
+                    {t('save')}
                   </button>
                   <button
                     type="button"

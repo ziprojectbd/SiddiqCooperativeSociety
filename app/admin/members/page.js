@@ -17,9 +17,19 @@ export default function MembersPage() {
   const [viewMember, setViewMember] = useState(null)
   const [showEditModal, setShowEditModal] = useState(false)
   const [editMember, setEditMember] = useState(null)
+  const [showCloseAccountModal, setShowCloseAccountModal] = useState(false)
+  const [closeAccountMember, setCloseAccountMember] = useState(null)
+  const [closeAccountForm, setCloseAccountForm] = useState({
+    notes: '',
+    paymentMethod: 'cash',
+    transactionId: '',
+    paymentDate: new Date().toISOString().split('T')[0],
+    confirmed: false,
+  })
   const [editForm, setEditForm] = useState({
     phone: '',
     password: '123456',
+    role: 'member',
   })
   const [showEditPassword, setShowEditPassword] = useState(false)
   const [deposits, setDeposits] = useState([])
@@ -48,7 +58,8 @@ export default function MembersPage() {
   const fetchMembers = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch('/api/members', {
+      // Add cache-busting timestamp to ensure fresh data
+      const res = await fetch(`/api/members?t=${Date.now()}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
@@ -86,19 +97,16 @@ export default function MembersPage() {
     }
   }
 
-  const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this member?')) return
-
-    try {
-      const token = localStorage.getItem('token')
-      await fetch(`/api/members/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      fetchMembers()
-    } catch (error) {
-      console.error('Failed to delete member:', error)
-    }
+  const handleDelete = async (member) => {
+    setCloseAccountMember(member)
+    setCloseAccountForm({
+      notes: '',
+      paymentMethod: 'cash',
+      transactionId: '',
+      paymentDate: new Date().toISOString().split('T')[0],
+      confirmed: false,
+    })
+    setShowCloseAccountModal(true)
   }
 
   const handleAddMember = async (e) => {
@@ -139,6 +147,7 @@ export default function MembersPage() {
     setEditForm({
       phone: member.phone || '',
       password: '123456',
+      role: member.role || 'member',
     })
     setShowEditModal(true)
   }
@@ -199,10 +208,10 @@ export default function MembersPage() {
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('phone')}</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('password')}</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('role')}</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('status')}</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('totalDeposit')}</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('loanStatus')}</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('loanAmount')}</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('profile')}</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-300">{t('action')}</th>
                   </tr>
                 </thead>
@@ -215,11 +224,6 @@ export default function MembersPage() {
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className="px-2 py-1 text-[10px] rounded-full bg-blue-900 text-blue-300">
                           {member.role}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="px-2 py-1 text-[10px] rounded-full bg-green-900 text-green-300">
-                          {t('active')}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-xs text-green-400 font-semibold whitespace-nowrap">
@@ -240,30 +244,29 @@ export default function MembersPage() {
                         ৳{loans.filter(l => l.memberId === member._id).reduce((sum, l) => sum + l.amount, 0).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
+                        <button
+                          onClick={() => {
+                            setViewMember(member)
+                            setShowViewModal(true)
+                          }}
+                          className="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700 transition-colors"
+                        >
+                          {t('view')}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex gap-2">
                           <button
-                            onClick={() => {
-                              setViewMember(member)
-                              setShowViewModal(true)
-                            }}
-                            className="p-1.5 hover:bg-gray-600 rounded-lg transition-colors"
-                            title="View"
-                          >
-                            <ViewEye size={16} className="text-green-400" />
-                          </button>
-                          <button
                             onClick={() => handleEditClick(member)}
-                            className="p-1.5 hover:bg-gray-600 rounded-lg transition-colors"
-                            title="Edit"
+                            className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
                           >
-                            <Pencil size={16} className="text-blue-400" />
+                            {t('edit')}
                           </button>
                           <button
-                            onClick={() => handleDelete(member._id)}
-                            className="p-1.5 hover:bg-gray-600 rounded-lg transition-colors"
-                            title="Delete"
+                            onClick={() => handleDelete(member)}
+                            className="px-3 py-1.5 bg-red-600 text-white text-xs rounded-lg hover:bg-red-700 transition-colors"
                           >
-                            <Trash2 size={16} className="text-red-400" />
+                            {t('closeAccount')}
                           </button>
                         </div>
                       </td>
@@ -590,9 +593,7 @@ export default function MembersPage() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">
-                  {editingMember ? t('editMember') : t('addMember')}
-                </h2>
+                <h2 className="text-2xl font-bold text-white">{t('editMember')}</h2>
                 <button
                   onClick={() => setShowEditModal(false)}
                   className="text-gray-400 hover:text-white"
@@ -628,6 +629,23 @@ export default function MembersPage() {
                     className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-700 text-white"
                     placeholder="Enter phone number"
                   />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    Role
+                  </label>
+                  <select
+                    required
+                    value={editForm.role}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, role: e.target.value })
+                    }
+                    className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-700 text-white"
+                  >
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                  </select>
                 </div>
 
                 <div className="mb-6">
@@ -671,6 +689,214 @@ export default function MembersPage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Close Account Modal */}
+        {showCloseAccountModal && closeAccountMember && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">{t('closeMemberAccount')}</h2>
+                <button
+                  onClick={() => setShowCloseAccountModal(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              {/* Member Info Section */}
+              <div className="mb-6 p-4 bg-gray-700 rounded-lg">
+                <h3 className="text-lg font-semibold text-white mb-4">{t('memberInfo')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('name')}</label>
+                    <p className="text-white">{closeAccountMember.name || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('memberId')}</label>
+                    <p className="text-white">{closeAccountMember._id || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('phone')}</label>
+                    <p className="text-white">{closeAccountMember.phone || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('joinDate')}</label>
+                    <p className="text-white">{closeAccountMember.joinDate ? new Date(closeAccountMember.joinDate).toLocaleDateString() : 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Financial Summary Section */}
+              <div className="mb-6 p-4 bg-gray-700 rounded-lg">
+                <h3 className="text-lg font-semibold text-white mb-4">{t('financialSummary')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('totalSavings')}</label>
+                    <p className="text-green-400 font-semibold">
+                      ৳{deposits.filter(d => d.memberId === closeAccountMember._id).reduce((sum, d) => sum + d.amount, 0).toLocaleString()}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('totalLoan')}</label>
+                    <p className="text-red-400 font-semibold">
+                      ৳{loans.filter(l => l.memberId === closeAccountMember._id).reduce((sum, l) => sum + l.amount, 0).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-400 mb-1">{t('currentBalance')}</label>
+                    <p className="text-blue-400 font-semibold">
+                      ৳{(deposits.filter(d => d.memberId === closeAccountMember._id).reduce((sum, d) => sum + d.amount, 0) - loans.filter(l => l.memberId === closeAccountMember._id).reduce((sum, l) => sum + l.amount, 0)).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Details Section */}
+              <div className="mb-6 p-4 bg-gray-700 rounded-lg">
+                <h3 className="text-lg font-semibold text-white mb-4">{t('paymentDetails')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">{t('paymentMethod')}</label>
+                    <select
+                      value={closeAccountForm.paymentMethod}
+                      onChange={(e) => setCloseAccountForm({ ...closeAccountForm, paymentMethod: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-800 text-white"
+                    >
+                      <option value="cash">{t('handCash')}</option>
+                      <option value="bkash">bKash</option>
+                      <option value="nagad">Nagad</option>
+                      <option value="rocket">Rocket</option>
+                    </select>
+                  </div>
+                  {closeAccountForm.paymentMethod !== 'cash' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">{t('transactionId')} ({t('optional')})</label>
+                      <input
+                        type="text"
+                        value={closeAccountForm.transactionId}
+                        onChange={(e) => setCloseAccountForm({ ...closeAccountForm, transactionId: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-800 text-white"
+                        placeholder="Enter transaction ID"
+                      />
+                    </div>
+                  )}
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-400 mb-2">{t('paymentDate')}</label>
+                    <input
+                      type="date"
+                      value={closeAccountForm.paymentDate}
+                      onChange={(e) => setCloseAccountForm({ ...closeAccountForm, paymentDate: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-800 text-white"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-400 mb-2">{t('notesRemarks')}</label>
+                    <textarea
+                      value={closeAccountForm.notes}
+                      onChange={(e) => setCloseAccountForm({ ...closeAccountForm, notes: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-800 text-white"
+                      placeholder="Enter notes or remarks"
+                      rows="3"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Confirmation Checkbox */}
+              <div className="mb-6">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={closeAccountForm.confirmed}
+                    onChange={(e) => setCloseAccountForm({ ...closeAccountForm, confirmed: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-600 text-indigo-600 focus:ring-indigo-500 bg-gray-800"
+                  />
+                  <span className="text-sm text-gray-300">{t('confirmCheckbox')}</span>
+                </label>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setShowCloseAccountModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 text-white"
+                >
+                  {t('cancel')}
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!closeAccountForm.confirmed) {
+                      alert('Please confirm the account details')
+                      return
+                    }
+                    
+                    try {
+                      const token = localStorage.getItem('token')
+                      
+                      // Calculate financial summary
+                      const totalSavings = deposits.filter(d => d.memberId === closeAccountMember._id).reduce((sum, d) => sum + d.amount, 0)
+                      const totalLoan = loans.filter(l => l.memberId === closeAccountMember._id).reduce((sum, l) => sum + l.amount, 0)
+                      const currentBalance = totalSavings - totalLoan
+                      
+                      const closeAccountData = {
+                        memberId: closeAccountMember._id,
+                        memberData: {
+                          name: closeAccountMember.name,
+                          phone: closeAccountMember.phone,
+                          joinDate: closeAccountMember.joinDate,
+                          role: closeAccountMember.role,
+                        },
+                        financialSummary: {
+                          totalSavings,
+                          totalLoan,
+                          currentBalance,
+                        },
+                        paymentDetails: {
+                          paymentMethod: closeAccountForm.paymentMethod,
+                          transactionId: closeAccountForm.transactionId,
+                          paymentDate: closeAccountForm.paymentDate,
+                          notes: closeAccountForm.notes,
+                        },
+                        closedAt: new Date().toISOString(),
+                      }
+                      
+                      const res = await fetch('/api/close-account', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(closeAccountData),
+                      })
+                      
+                      const data = await res.json()
+                      
+                      if (data.success) {
+                        alert('Account closed successfully')
+                        setShowCloseAccountModal(false)
+                        setCloseAccountMember(null)
+                        // Immediately remove the closed member from local state using functional update
+                        setMembers(prevMembers => prevMembers.filter(m => m._id !== closeAccountMember._id))
+                        // Refresh the members list from server to get latest data
+                        await fetchMembers()
+                      } else {
+                        alert('Failed to close account: ' + data.error)
+                      }
+                    } catch (error) {
+                      console.error('Failed to close account:', error)
+                      alert('Failed to close account')
+                    }
+                  }}
+                  disabled={!closeAccountForm.confirmed}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                >
+                  {t('confirmCloseAccount')}
+                </button>
+              </div>
             </div>
           </div>
         )}
