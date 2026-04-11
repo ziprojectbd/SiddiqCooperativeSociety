@@ -19,11 +19,26 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      // Only allow specific admin emails
+      // Check if email is in allowed list
       const allowedAdminEmails = process.env.ADMIN_EMAILS?.split(',') || []
       if (allowedAdminEmails.includes(user.email)) {
         return true
       }
+      
+      // Also check if this email belongs to an admin in the database
+      try {
+        const db = await getDb()
+        const member = await db.collection('members').findOne({ 
+          email: user.email,
+          role: 'admin'
+        })
+        if (member) {
+          return true
+        }
+      } catch (error) {
+        console.error('Database check failed:', error)
+      }
+      
       return false
     },
     async redirect({ url, baseUrl }) {
