@@ -8,8 +8,8 @@ import Header from '@/components/Header'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Somobay Somiti Management System',
-  description: 'A comprehensive management system for somobay somiti',
+  title: 'SK সমবায় সমিতি, কাউনিয়া, রংপুর',
+  description: 'সমবায় সমিতি ব্যবস্থাপনা ব্যবস্থা',
 }
 
 export default function RootLayout({ children }) {

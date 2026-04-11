@@ -20,8 +20,8 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ user, account, profile }) {
       // Check if email is in allowed list
-      const allowedAdminEmails = process.env.ADMIN_EMAILS?.split(',') || []
-      if (allowedAdminEmails.includes(user.email)) {
+      const adminEmail = process.env.ADMIN_EMAIL
+      if (adminEmail === user.email) {
         return true
       }
       

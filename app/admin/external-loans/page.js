@@ -73,7 +73,7 @@ export default function ExternalLoansPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      await fetch(`/api/external-loans/${editingLoan._id}`, {
+      await fetch(`/api/external-loans?id=${editingLoan._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ export default function ExternalLoansPage() {
     if (!confirm('Are you sure you want to delete this loan?')) return
     try {
       const token = localStorage.getItem('token')
-      await fetch(`/api/external-loans/${id}`, {
+      await fetch(`/api/external-loans?id=${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })

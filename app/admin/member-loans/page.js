@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Loading from '@/components/Loading'
-import { Plus, X, History } from 'lucide-react'
+import { Plus, X, History, FileText } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function LoansPage() {
   const { t } = useLanguage()
+  const router = useRouter()
   const [loans, setLoans] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -97,6 +98,13 @@ export default function LoansPage() {
       <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 md:p-6 bg-gray-800">
           <h1 className="text-xl sm:text-2xl font-bold text-white">{t('memberLoans')}</h1>
+          <button
+            onClick={() => router.push('/admin/member-loan-history')}
+            className="bg-gray-700 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-xl hover:bg-gray-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-lg transition-all active:scale-95 whitespace-nowrap"
+          >
+            <FileText size={18} className="sm:w-5 sm:h-5" />
+            Loan History
+          </button>
         </div>
 
         <div className="flex-1 overflow-auto p-4 md:p-8">

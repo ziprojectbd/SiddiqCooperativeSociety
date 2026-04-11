@@ -183,27 +183,6 @@ export async function POST(req, { params }) {
   const db = await getDb()
 
   try {
-    // Login endpoint
-    if (path === 'auth/login') {
-      const { phone, password } = await req.json()
-      const member = await db.collection('members').findOne({ phone })
-      
-      if (!member || !(await bcrypt.compare(password, member.password))) {
-        return Response.json({ message: 'Invalid credentials' }, { status: 401 })
-      }
-
-      const token = jwt.sign(
-        { userId: member._id, role: member.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '7d' }
-      )
-
-      return Response.json({
-        token,
-        user: { _id: member._id, name: member.name, phone: member.phone, role: member.role }
-      })
-    }
-
     // Create member
     if (path === 'members') {
       const data = await req.json()

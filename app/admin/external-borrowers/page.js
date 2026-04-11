@@ -89,7 +89,7 @@ export default function ExternalBorrowersPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      await fetch(`/api/external-borrowers/${editingBorrower._id}`, {
+      await fetch(`/api/external-borrowers?id=${editingBorrower._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ export default function ExternalBorrowersPage() {
     if (!confirm('Are you sure you want to delete this borrower?')) return
     try {
       const token = localStorage.getItem('token')
-      await fetch(`/api/external-borrowers/${id}`, {
+      await fetch(`/api/external-borrowers?id=${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       })

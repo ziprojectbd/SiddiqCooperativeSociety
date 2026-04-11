@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Loading from '@/components/Loading'
 import { Plus, Pencil, Trash2, X, Eye, EyeOff, Eye as ViewEye } from 'lucide-react'
@@ -8,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function MembersPage() {
   const { t } = useLanguage()
+  const router = useRouter()
   const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -28,7 +30,7 @@ export default function MembersPage() {
   })
   const [editForm, setEditForm] = useState({
     phone: '',
-    password: '123456',
+    password: '',
     role: 'member',
   })
   const [showEditPassword, setShowEditPassword] = useState(false)
@@ -146,7 +148,7 @@ export default function MembersPage() {
     setEditMember(member)
     setEditForm({
       phone: member.phone || '',
-      password: '123456',
+      password: '',
       role: member.role || 'member',
     })
     setShowEditModal(true)
@@ -156,19 +158,31 @@ export default function MembersPage() {
     e.preventDefault()
     try {
       const token = localStorage.getItem('token')
-      await fetch(`/api/members/${editMember._id}`, {
+      const updateData = { ...editForm }
+      // Only send password if it's being changed
+      if (!updateData.password) {
+        delete updateData.password
+      }
+      const res = await fetch(`/api/members?id=${editMember._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(editForm),
+        body: JSON.stringify(updateData),
       })
+      if (res.ok) {
+        alert('Member updated successfully!')
+      } else {
+        const errorData = await res.json()
+        alert('Failed to update member: ' + (errorData.error || 'Unknown error'))
+      }
       setShowEditModal(false)
       setEditMember(null)
       fetchMembers()
     } catch (error) {
       console.error('Failed to update member:', error)
+      alert('Failed to update member: ' + error.message)
     }
   }
 
@@ -190,7 +204,7 @@ export default function MembersPage() {
         <div className="flex flex-col gap-4 p-4 md:p-6 bg-gray-800 shadow-sm sticky top-0 z-10">
           <h1 className="text-2xl font-bold text-white">{t('members')}</h1>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => router.push('/admin/members/add-member')}
             className="bg-indigo-600 text-white px-4 py-3 rounded-xl hover:bg-indigo-700 flex items-center gap-2 text-base font-medium w-full shadow-lg transition-all active:scale-95"
           >
             <Plus size={20} />
@@ -529,50 +543,108 @@ export default function MembersPage() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Member Photo & Basic Info */}
+              <div className="flex items-center gap-4 mb-6 p-4 bg-gray-700 rounded-xl">
+                {viewMember.imageUrl ? (
+                  <img
+                    src={viewMember.imageUrl}
+                    alt={viewMember.name}
+                    className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-gray-600 border-2 border-gray-500 flex items-center justify-center">
+                    <span className="text-gray-400 text-2xl font-bold">
+                      {viewMember.name?.charAt(0)?.toUpperCase() || '?'}
+                    </span>
+                  </div>
+                )}
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Name</label>
-                  <p className="text-white">{viewMember.name || 'N/A'}</p>
+                  <h3 className="text-xl font-bold text-white">{viewMember.name || 'N/A'}</h3>
+                  <p className="text-gray-300 text-sm">{viewMember.phone || 'N/A'}</p>
+                  <span className={`inline-block mt-1 px-2 py-0.5 text-xs rounded-full ${
+                    viewMember.role === 'admin' ? 'bg-red-900 text-red-300' : 'bg-green-900 text-green-300'
+                  }`}>
+                    {viewMember.role || 'member'}
+                  </span>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Phone</label>
-                  <p className="text-white">{viewMember.phone || 'N/A'}</p>
+              </div>
+
+              {/* Personal Information */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-indigo-400 mb-3 border-b border-gray-700 pb-2">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Email</label>
+                    <p className="text-white text-sm">{viewMember.email || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Address</label>
+                    <p className="text-white text-sm">{viewMember.address || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">NID</label>
+                    <p className="text-white text-sm">{viewMember.nid || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Date of Birth</label>
+                    <p className="text-white text-sm">{viewMember.dateOfBirth ? new Date(viewMember.dateOfBirth).toLocaleDateString() : 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Occupation</label>
+                    <p className="text-white text-sm">{viewMember.occupation || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Monthly Income</label>
+                    <p className="text-white text-sm">{viewMember.monthlyIncome ? `৳${Number(viewMember.monthlyIncome).toLocaleString()}` : 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Join Date</label>
+                    <p className="text-white text-sm">{viewMember.joinDate ? new Date(viewMember.joinDate).toLocaleDateString() : 'N/A'}</p>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Address</label>
-                  <p className="text-white">{viewMember.address || 'N/A'}</p>
+              </div>
+
+              {/* Guardian/Nominee Information */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-purple-400 mb-3 border-b border-gray-700 pb-2">Guardian/Nominee</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Name</label>
+                    <p className="text-white text-sm">{viewMember.guardianName || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Phone</label>
+                    <p className="text-white text-sm">{viewMember.guardianPhone || 'N/A'}</p>
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Address</label>
+                    <p className="text-white text-sm">{viewMember.guardianAddress || 'N/A'}</p>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">NID</label>
-                  <p className="text-white">{viewMember.nid || 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Date of Birth</label>
-                  <p className="text-white">{viewMember.dateOfBirth ? new Date(viewMember.dateOfBirth).toLocaleDateString() : 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Occupation</label>
-                  <p className="text-white">{viewMember.occupation || 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Monthly Income</label>
-                  <p className="text-white">{viewMember.monthlyIncome ? `৳${viewMember.monthlyIncome.toLocaleString()}` : 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Guardian/Nominee Name</label>
-                  <p className="text-white">{viewMember.guardianName || 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Guardian/Nominee Phone</label>
-                  <p className="text-white">{viewMember.guardianPhone || 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Join Date</label>
-                  <p className="text-white">{viewMember.joinDate ? new Date(viewMember.joinDate).toLocaleDateString() : 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Role</label>
-                  <p className="text-white capitalize">{viewMember.role || 'N/A'}</p>
+              </div>
+
+              {/* Financial Summary */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-green-400 mb-3 border-b border-gray-700 pb-2">Financial Summary</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="p-3 bg-gray-700 rounded-lg text-center">
+                    <p className="text-xs text-gray-400">Total Deposit</p>
+                    <p className="text-lg font-bold text-white">
+                      ৳{deposits.filter(d => d.memberId === viewMember._id || d.memberId === viewMember._id?.toString()).reduce((sum, d) => sum + (d.amount || 0), 0).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="p-3 bg-gray-700 rounded-lg text-center">
+                    <p className="text-xs text-gray-400">Total Loan</p>
+                    <p className="text-lg font-bold text-white">
+                      ৳{loans.filter(l => l.memberId === viewMember._id || l.memberId === viewMember._id?.toString()).reduce((sum, l) => sum + (l.amount || 0), 0).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="p-3 bg-gray-700 rounded-lg text-center">
+                    <p className="text-xs text-gray-400">Loan Status</p>
+                    <p className="text-lg font-bold text-white">
+                      {loans.filter(l => (l.memberId === viewMember._id || l.memberId === viewMember._id?.toString()) && l.status === 'active').length > 0 ? 'Active' : 'None'}
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -650,18 +722,17 @@ export default function MembersPage() {
 
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-400 mb-2">
-                    New Password
+                    New Password (leave blank to keep current)
                   </label>
                   <div className="relative">
                     <input
                       type={showEditPassword ? 'text' : 'password'}
-                      required
                       value={editForm.password}
                       onChange={(e) =>
                         setEditForm({ ...editForm, password: e.target.value })
                       }
                       className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-gray-700 text-white pr-12"
-                      placeholder="Enter new password"
+                      placeholder="Leave blank to keep current password"
                     />
                     <button
                       type="button"
