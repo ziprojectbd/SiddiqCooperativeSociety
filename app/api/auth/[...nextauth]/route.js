@@ -26,6 +26,10 @@ const handler = NextAuth({
       }
       return false
     },
+    async redirect({ url, baseUrl }) {
+      // Always redirect to admin dashboard after successful sign-in
+      return '/admin/dashboard'
+    },
     async jwt({ token, user, account }) {
       if (user) {
         token.userId = user.id

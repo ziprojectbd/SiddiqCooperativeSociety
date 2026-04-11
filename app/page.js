@@ -146,7 +146,7 @@ export default function LoginPage() {
             </div>
           </div>
           <button
-            onClick={() => signIn('google', { callbackUrl: '/admin/dashboard' })}
+            onClick={() => signIn('google', { redirect: true })}
             className="mt-3 w-full bg-white text-gray-800 py-3 rounded-xl hover:bg-gray-100 transition-all font-semibold shadow-lg flex items-center justify-center gap-2"
           >
             <Chrome size={20} />
