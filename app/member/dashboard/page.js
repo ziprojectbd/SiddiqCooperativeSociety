@@ -29,6 +29,12 @@ export default function MemberDashboard() {
       const res = await fetch(`/api/stats/member/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
+      if (res.status === 401) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        window.location.href = '/'
+        return
+      }
       const data = await res.json()
       setStats(data)
     } catch (error) {

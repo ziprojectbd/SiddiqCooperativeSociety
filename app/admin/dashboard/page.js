@@ -54,6 +54,10 @@ export default function AdminDashboard() {
       const res = await fetch('/api/stats/dashboard', {
         headers: { Authorization: `Bearer ${token}` },
       })
+      if (res.status === 401) {
+        handleUnauthorized()
+        return
+      }
       const data = await res.json()
       setStats(data)
     } catch (error) {
@@ -63,14 +67,21 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleUnauthorized = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    router.push('/')
+  }
+
   const fetchMembers = async () => {
     try {
       const token = localStorage.getItem('token')
       const res = await fetch('/api/members', {
         headers: { Authorization: `Bearer ${token}` },
       })
+      if (res.status === 401) return handleUnauthorized()
       const data = await res.json()
-      setMembers(data)
+      setMembers(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Failed to fetch members:', error)
     }
@@ -82,6 +93,7 @@ export default function AdminDashboard() {
       const res = await fetch('/api/settings', {
         headers: { Authorization: `Bearer ${token}` },
       })
+      if (res.status === 401) return handleUnauthorized()
       const data = await res.json()
       setSettings(data)
     } catch (error) {
@@ -95,10 +107,12 @@ export default function AdminDashboard() {
       const res = await fetch('/api/deposits', {
         headers: { Authorization: `Bearer ${token}` },
       })
+      if (res.status === 401) return handleUnauthorized()
       const data = await res.json()
-      setRecentDeposits(data.slice(0, 5))
+      setRecentDeposits(Array.isArray(data) ? data.slice(0, 5) : [])
     } catch (error) {
       console.error('Failed to fetch recent deposits:', error)
+      setRecentDeposits([])
     }
   }
 
@@ -108,10 +122,12 @@ export default function AdminDashboard() {
       const res = await fetch('/api/loans', {
         headers: { Authorization: `Bearer ${token}` },
       })
+      if (res.status === 401) return handleUnauthorized()
       const data = await res.json()
-      setRecentLoans(data.slice(0, 5))
+      setRecentLoans(Array.isArray(data) ? data.slice(0, 5) : [])
     } catch (error) {
       console.error('Failed to fetch recent loans:', error)
+      setRecentLoans([])
     }
   }
 

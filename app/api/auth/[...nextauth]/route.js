@@ -1,14 +1,6 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { MongoClient } from 'mongodb'
-
-const uri = process.env.MONGODB_URI
-
-async function getDb() {
-  const client = new MongoClient(uri)
-  await client.connect()
-  return client.db('somobay-somiti')
-}
+import { getDb } from '@/lib/mongodb'
 
 const handler = NextAuth({
   providers: [

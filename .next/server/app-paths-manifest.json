@@ -1,14 +1,5 @@
 {
-  "/not-found": "app/not-found.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/reports/page": "app/admin/reports/page.js",
-  "/admin/members/page": "app/admin/members/page.js",
-  "/admin/deposits/page": "app/admin/deposits/page.js",
-  "/admin/members/add-member/page": "app/admin/members/add-member/page.js",
-  "/api/settings/route": "app/api/settings/route.js",
-  "/api/members/route": "app/api/members/route.js",
-  "/api/loans/route": "app/api/loans/route.js",
-  "/api/deposits/route": "app/api/deposits/route.js",
+  "/page": "app/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/admin/deposits/add-deposit/page": "app/admin/deposits/add-deposit/page.js"
+  "/admin/dashboard/page": "app/admin/dashboard/page.js"
 }

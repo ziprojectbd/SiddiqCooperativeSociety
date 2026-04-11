@@ -1,14 +1,6 @@
-import { MongoClient } from 'mongodb'
+import { getDb } from '@/lib/mongodb'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-
-const uri = process.env.MONGODB_URI
-
-async function getDb() {
-  const client = new MongoClient(uri)
-  await client.connect()
-  return client.db('somobay-somiti')
-}
 
 export async function POST(req) {
   let db
@@ -53,10 +45,5 @@ export async function POST(req) {
     })
   } catch (error) {
     return Response.json({ message: 'Login error: ' + error.message }, { status: 500 })
-  } finally {
-    if (db) {
-      const client = db.client
-      await client.close()
-    }
   }
 }

@@ -1,13 +1,5 @@
-import { MongoClient, ObjectId } from 'mongodb'
+import { getDb } from '@/lib/mongodb'
 import jwt from 'jsonwebtoken'
-
-const uri = process.env.MONGODB_URI
-const client = new MongoClient(uri)
-
-async function getDb() {
-  await client.connect()
-  return client.db('somobay-somiti')
-}
 
 function verifyToken(req) {
   const token = req.headers.get('authorization')?.replace('Bearer ', '')
